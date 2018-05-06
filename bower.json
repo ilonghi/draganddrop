@@ -1,0 +1,34 @@
+{
+  "name": "drag-and-drop",
+  "version": "0.0.1",
+  "main": [
+  ],
+  "authors": [
+    "Alvaro Livraghi <a.livraghi@sirti.it>",
+    "Ivan Longhi <i.longhi@sirti.it>",
+    "Rizzardo Belotti <r.belotti@sirti.it>",
+    "Massimo Vasile <m.vasile@sirti.it>"
+  ],
+  "description": "TBD",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "angular-bootstrap": "^1.3.3",
+    "angular-drag-and-drop-lists": "^2.1.0",
+    "underscore": "^1.8.3"
+  },
+  "keywords": [
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+  }
+}

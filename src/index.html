@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drag and drop</title>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
+
+<link rel="stylesheet" href="simple.css" />
+
+</head>
+<body style="padding-top: 30px">
+
+<div ng-app="sApp" ng-controller="sCtrl" class="container-fluid">
+
+	<div class="simpleDemo row">
+	
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">Properties</h3>
+						</div>
+						<div class="panel-body">
+							<!-- The dnd-list directive allows to drop elements into it.
+								 The dropped data will be added to the referenced list -->
+							<ul dnd-list="models.properties"
+								dnd-drop="apRemoved(item)"
+								dnd-allowed-types="['ap']"
+							>
+								<!-- The dnd-draggable directive makes an element draggable and will
+									 transfer the object that was assigned to it. If an element was
+									 dragged away, you have to remove it from the original list
+									 yourself using the dnd-moved attribute -->
+								<li ng-repeat="item in models.properties"
+									dnd-draggable="item"
+									dnd-type="item.type"
+									dnd-moved="models.properties.splice($index, 1)"
+									dnd-effect-allowed="move"
+								>
+									{{item.name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<form>
+						<div class="col-md-12">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<h3 class="panel-title">Activity Properties</h3>
+								</div>
+								<div class="panel-body">
+	
+									<div class="panel panel-info" ng-repeat="group in models.ap">
+										<div class="panel-heading">
+											<h4 class="panel-title">Group {{group.group || ''}}</h3>
+										</div>
+										<div class="panel-body">
+											<!-- The dnd-list directive allows to drop elements into it.
+												 The dropped data will be added to the referenced list -->
+											<ul dnd-list="group.properties"
+												dnd-drop="apAdded(item)"
+											>
+												<!-- The dnd-draggable directive makes an element draggable and will
+													 transfer the object that was assigned to it. If an element was
+													 dragged away, you have to remove it from the original list
+													 yourself using the dnd-moved attribute -->
+												<li ng-repeat="item in group.properties"
+													dnd-draggable="item"
+													dnd-type="item.type"
+													dnd-moved="group.properties.splice($index, 1)"
+													dnd-effect-allowed="move"
+												>
+													{{item.name}}
+													<div>
+														<label class="checkbox-inline">
+															<input type="checkbox"ng-model="item.readOnly"> Read Only
+														</label>
+														<label class="checkbox-inline">
+															<input type="checkbox"ng-model="item.nullable"> Nullable
+														</label>
+														<label class="checkbox-inline">
+															<input type="checkbox"ng-model="item.expired"> Expired
+														</label>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+	
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+	
+		</div>
+	
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Generated Model</h3>
+				</div>
+				<div class="panel-body">
+					<pre class="code">{{modelAsJson}}</pre>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+</div>
+
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+
+<script src="bower_components/underscore/underscore-min.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>

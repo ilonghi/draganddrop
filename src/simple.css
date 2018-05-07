@@ -1,3 +1,12 @@
+.simpleDemo .group-panel-first {
+	margin-bottom: 10px;
+}
+
+.simpleDemo .group-panel-others {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 /**
  * The dnd-list should always have a min-height,
  * otherwise you can't drop to it once it's empty
@@ -17,12 +26,22 @@
     display: none;
 }
 
+.simpleDemo div[dnd-list] .dndDraggingSource {
+    display: none;
+}
+
 /**
  * An element with .dndPlaceholder class will be
  * added to the dnd-list while the user is dragging
  * over it.
  */
 .simpleDemo ul[dnd-list] .dndPlaceholder {
+    background-color: #ddd;
+    display: block;
+    min-height: 42px;
+}
+
+.simpleDemo div[dnd-list] .dndPlaceholder {
     background-color: #ddd;
     display: block;
     min-height: 42px;
@@ -36,12 +55,4 @@
     display: block;
     padding: 10px 15px;
     margin-bottom: -1px;
-}
-
-/**
- * Show selected elements in green
- */
-.simpleDemo ul[dnd-list] li.selected {
-    background-color: #dff0d8;
-    color: #3c763d;
 }

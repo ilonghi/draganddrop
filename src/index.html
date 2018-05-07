@@ -51,9 +51,21 @@
 								<div class="panel-heading">
 									<h3 class="panel-title">Activity Properties</h3>
 								</div>
-								<div class="panel-body">
+								<div dnd-list="models.ap"
+									dnd-allowed-types="['group']"
+									dnd-dragover="checkGroupPosition(item, index)"
+									class="panel-body"
+								>
 	
-									<div class="panel panel-info" ng-repeat="group in models.ap">
+									<div ng-repeat="group in models.ap"
+										dnd-draggable="group"
+										dnd-type="'group'"
+										x-dnd-moved="models.ap.splice($index, 1)"
+										dnd-effect-allowed="move"
+										dnd-disable-if="!group.group"
+										class="panel panel-info"
+										ng-class="{ 'group-panel-first': $first, 'group-panel-others': !$first }"
+									>
 										<div class="panel-heading">
 											<h4 class="panel-title">Group {{group.group || ''}}</h3>
 										</div>
@@ -62,6 +74,7 @@
 												 The dropped data will be added to the referenced list -->
 											<ul dnd-list="group.properties"
 												dnd-drop="apAdded(item)"
+												dnd-allowed-types="['ap','property']"
 											>
 												<!-- The dnd-draggable directive makes an element draggable and will
 													 transfer the object that was assigned to it. If an element was

@@ -43,7 +43,13 @@ angular
             'readOnly':false,
             'name':'ENGAGE_DESCRIPTION',
             'nullable':false
-          },
+          }
+        ]
+      },
+      {
+        'group': 'GROUP_2',
+        'id' : 2,
+        'properties': [
           {
             'expired':false,
             'readOnly':false,
@@ -59,8 +65,8 @@ angular
         ]
       },
       {
-        'group': 'GROUP_2',
-        'id' : 2,
+        'group': 'GROUP_3',
+        'id' : 3,
         'properties': [
           {
             'expired':false,
@@ -132,6 +138,15 @@ angular
   $scope.apRemoved = function(item) {
     item.type = 'property';
     return item;
+  };
+  
+  $scope.checkGroupPosition = function(item, index) {
+    // non permetto che un gruppo vada in ultima posizione che è riservata agli ungrouped
+    // NOTA: sicuramente si tratta di un gruppo e non degli ungrouped in quanto non sono draggabili
+    if(index === $scope.models.ap.length) {
+      return false;
+    }
+    return true;
   };
   
   // Model to JSON for demo purpose

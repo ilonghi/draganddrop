@@ -57,7 +57,7 @@ angular
             'nullable':false
           },
           {
-            'expired':false,
+            'expired':true,
             'readOnly':false,
             'name':'ESTIMATED_EFFORT_OUTLOOK',
             'nullable':false
@@ -147,6 +147,20 @@ angular
       return false;
     }
     return true;
+  };
+  
+  function swap(a, x, y) {
+    var tmp = a[x];
+    a[x] = a[y];
+    a[y] = tmp;
+  }
+  
+  $scope.moveGroupUp = function(index) {
+    swap($scope.models.ap, index, index-1);
+  };
+  
+  $scope.moveGroupDown = function(index) {
+    swap($scope.models.ap, index, index+1);
   };
   
   // Model to JSON for demo purpose

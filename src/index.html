@@ -17,7 +17,7 @@
 		<div class="col-md-8">
 			<div class="row">
 				<div class="col-md-4">
-					<div class="panel panel-info">
+					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Properties</h3>
 						</div>
@@ -39,6 +39,9 @@
 									dnd-effect-allowed="move"
 								>
 									{{item.name}}
+									<sup class="text-warning" ng-if="item.expired">
+										<span class="glyphicon glyphicon-alert"></span> Expired
+									</sup>
 								</li>
 							</ul>
 						</div>
@@ -47,27 +50,35 @@
 				<div class="col-md-8">
 					<form>
 						<div class="col-md-12">
-							<div class="panel panel-info">
+							<div class="panel panel-primary">
 								<div class="panel-heading">
 									<h3 class="panel-title">Activity Properties</h3>
 								</div>
-								<div dnd-list="models.ap"
-									dnd-allowed-types="['group']"
-									dnd-dragover="checkGroupPosition(item, index)"
-									class="panel-body"
-								>
-	
-									<div ng-repeat="group in models.ap"
-										dnd-draggable="group"
-										dnd-type="'group'"
-										x-dnd-moved="models.ap.splice($index, 1)"
-										dnd-effect-allowed="move"
-										dnd-disable-if="!group.group"
-										class="panel panel-info"
-										ng-class="{ 'group-panel-first': $first, 'group-panel-others': !$first }"
-									>
-										<div class="panel-heading">
-											<h4 class="panel-title">Group {{group.group || ''}}</h3>
+								<div class="panel-body">
+									<div class="panel panel-info" ng-repeat="group in models.ap">
+										<div class="panel-heading" ng-if="$index !== models.ap.length-1">
+											<div class="row">
+												<div class="panel-title col-md-10">Group {{ group.group }}</div>
+												<div class="col-md-2 text-right">
+													<button
+														ng-disabled="models.ap.length <= 2 || $index === 0"
+														class="btn btn-default btn-sm"
+														ng-click="moveGroupUp($index)"
+													>
+														<span class="glyphicon glyphicon-arrow-up"></span>
+													</button>
+													<button
+														class="btn btn-default btn-sm"
+														ng-disabled="models.ap.length <= 2 || $index === models.ap.length-2"
+														ng-click="moveGroupDown($index)"
+													>
+														<span class="glyphicon glyphicon-arrow-down"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="panel-heading" ng-if="$index === models.ap.length-1">
+											<div class="panel-title">Ungrouped</div>
 										</div>
 										<div class="panel-body">
 											<!-- The dnd-list directive allows to drop elements into it.
@@ -87,6 +98,9 @@
 													dnd-effect-allowed="move"
 												>
 													{{item.name}}
+													<sup class="text-warning" ng-if="item.expired">
+														<span class="glyphicon glyphicon-alert"></span> Expired
+													</sup>
 													<div>
 														<label class="checkbox-inline">
 															<input type="checkbox"ng-model="item.readOnly"> Read Only
@@ -94,15 +108,11 @@
 														<label class="checkbox-inline">
 															<input type="checkbox"ng-model="item.nullable"> Nullable
 														</label>
-														<label class="checkbox-inline">
-															<input type="checkbox"ng-model="item.expired"> Expired
-														</label>
 													</div>
 												</li>
 											</ul>
 										</div>
 									</div>
-	
 								</div>
 							</div>
 						</div>

@@ -62,13 +62,13 @@
 												<div class="col-md-2 text-right">
 													<button
 														ng-disabled="models.ap.length <= 2 || $index === 0"
-														class="btn btn-default btn-sm"
+														class="btn btn-default btn-xs"
 														ng-click="moveGroupUp($index)"
 													>
 														<span class="glyphicon glyphicon-arrow-up"></span>
 													</button>
 													<button
-														class="btn btn-default btn-sm"
+														class="btn btn-default btn-xs"
 														ng-disabled="models.ap.length <= 2 || $index === models.ap.length-2"
 														ng-click="moveGroupDown($index)"
 													>
@@ -101,14 +101,16 @@
 													<sup class="text-warning" ng-if="item.expired">
 														<span class="glyphicon glyphicon-alert"></span> Expired
 													</sup>
-													<div>
+													<dnd-nodrag>
+													<div class="pull-right">
 														<label class="checkbox-inline">
-															<input type="checkbox"ng-model="item.readOnly"> Read Only
+															<input type="checkbox"ng-model="item.readOnly"> RO
 														</label>
 														<label class="checkbox-inline">
-															<input type="checkbox"ng-model="item.nullable"> Nullable
+															<input type="checkbox"ng-model="item.nullable"> N
 														</label>
 													</div>
+													</dnd-nodrag>
 												</li>
 											</ul>
 										</div>

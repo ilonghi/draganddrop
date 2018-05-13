@@ -2,10 +2,22 @@
 
 angular
 
-.module('sApp', ['dndLists'])
+.module('sApp', ['dndLists', 'ngAnimate', 'ngSanitize', 'ui.bootstrap'])
 
 .controller('sCtrl', function($scope) {
 
+  function swapElements(a, x, y) {
+    var tmp = a[x];
+    a[x] = a[y];
+    a[y] = tmp;
+  }
+  
+  function insertBeforLastElement(a, x) {
+    var tmp = a[a.length-1];
+    a.splice(-1, 1, x);
+    a.push(tmp);
+  }
+  
   var allProperties = [
     'END_DATE',
     'ENGAGE_DESCRIPTION',
@@ -36,11 +48,11 @@ angular
             'expired':false,
             'readOnly':false,
             'name':'END_DATE',
-            'nullable':false
+            'nullable':true
           },
           {
             'expired':false,
-            'readOnly':false,
+            'readOnly':true,
             'name':'ENGAGE_DESCRIPTION',
             'nullable':false
           }
@@ -108,6 +120,8 @@ angular
     properties: []
   };
 
+  $scope.newGroupName = undefined;
+  
   _.each(allProperties, function(p) {
     var property = {
       name: p,
@@ -149,18 +163,32 @@ angular
     return true;
   };
   
-  function swap(a, x, y) {
-    var tmp = a[x];
-    a[x] = a[y];
-    a[y] = tmp;
-  }
+  $scope.addNewGroup = function() {
+    if(_.findWhere($scope.models.ap, { group: $scope.newGroupName })) {
+      // FIXME: visualizzare alert
+      $scope.newGroupName = undefined;
+      return;
+    }
+    insertBeforLastElement($scope.models.ap, {
+      group: $scope.newGroupName,
+      properties: []
+    });
+    $scope.newGroupName = undefined;
+  };
   
   $scope.moveGroupUp = function(index) {
-    swap($scope.models.ap, index, index-1);
+    swapElements($scope.models.ap, index, index-1);
   };
   
   $scope.moveGroupDown = function(index) {
-    swap($scope.models.ap, index, index+1);
+    swapElements($scope.models.ap, index, index+1);
+  };
+  
+  $scope.removeGroup = function(index) {
+    _.each($scope.models.ap[index].properties, function(item) {
+      $scope.models.properties.push(item);
+    });
+    $scope.models.ap.splice(index, 1);
   };
   
   // Model to JSON for demo purpose

@@ -1,8 +1,7 @@
 {
   "name": "drag-and-drop",
   "version": "0.0.1",
-  "main": [
-  ],
+  "main": [],
   "authors": [
     "Alvaro Livraghi <a.livraghi@sirti.it>",
     "Ivan Longhi <i.longhi@sirti.it>",
@@ -17,10 +16,10 @@
     "angular-sanitize": "^1.5.8",
     "bootstrap": "^3.3.7",
     "angular-drag-and-drop-lists": "^2.1.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "sirti-alert": "http://dvmas003.ict.sirti.net:10090/git/js-ng-sirtialert.git"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "license": "MIT",
   "homepage": "",
   "private": true,
@@ -31,6 +30,5 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

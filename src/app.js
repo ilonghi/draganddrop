@@ -2,9 +2,9 @@
 
 angular
 
-.module('sApp', ['dndLists', 'ngAnimate', 'ngSanitize', 'ui.bootstrap'])
+.module('sApp', ['dndLists', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'sirti-alert'])
 
-.controller('sCtrl', function($scope) {
+.controller('sCtrl', function($scope, sirtiAlert) {
 
   function swapElements(a, x, y) {
     var tmp = a[x];
@@ -165,7 +165,7 @@ angular
   
   $scope.addNewGroup = function() {
     if(_.findWhere($scope.models.ap, { group: $scope.newGroupName })) {
-      // FIXME: visualizzare alert
+      sirtiAlert.error('A group named ' + $scope.newGroupName + ' already exists');
       $scope.newGroupName = undefined;
       return;
     }
@@ -173,6 +173,7 @@ angular
       group: $scope.newGroupName,
       properties: []
     });
+    sirtiAlert.success('Group ' + $scope.newGroupName + ' successfully added');
     $scope.newGroupName = undefined;
   };
   

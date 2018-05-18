@@ -18,8 +18,8 @@ bower install --save api-art=http://dvmas003.ict.sirti.net:10090/git/js-ng-apiar
 I file da includere nel progetto si troveranno al seguente path `bower_components/api-art/dist`:
 
 ```html
-<link rel="stylesheet" href="bower_components/sirti-column-sort-and-filter/dist/api-art.css">
-<script src="bower_components/sirti-column-sort-and-filter/dist/api-art.js"></script>
+<link rel="stylesheet" href="bower_components/api-art/dist/api-art.css">
+<script src="bower_components/api-art/dist/api-art.js"></script>
 ```
 
 Aggiunta componente all'app di `Angular`:

@@ -1,0 +1,171 @@
+<div class="container-fluid">
+
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h1 class="panel-title">Activity type {{ activityType }}</h1>
+		</div>
+		<div class="panel-body">
+
+			<div class="row">
+			
+				<div class="col-md-8">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Properties</h3>
+								</div>
+								<div class="panel-body">
+									<!-- The dnd-list directive allows to drop elements into it.
+										 The dropped data will be added to the referenced list -->
+									<ul dnd-list="models.properties"
+										dnd-drop="apRemoved(item)"
+										dnd-allowed-types="['ap']"
+									>
+										<!-- The dnd-draggable directive makes an element draggable and will
+											 transfer the object that was assigned to it. If an element was
+											 dragged away, you have to remove it from the original list
+											 yourself using the dnd-moved attribute -->
+										<li ng-repeat="item in models.properties"
+											dnd-draggable="item"
+											dnd-type="item.type"
+											dnd-moved="models.properties.splice($index, 1)"
+											dnd-effect-allowed="move"
+										>
+											{{item.name}}
+											<sup class="text-warning" ng-if="item.expired">
+												<span class="glyphicon glyphicon-alert"></span> expired
+											</sup>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8">
+							<form>
+								<div class="col-md-12">
+									<div class="panel panel-primary">
+										<div class="panel-heading">
+											<h3 class="panel-title">Activity Properties</h3>
+										</div>
+										<div class="panel-body">
+											<div class="panel panel-default">
+												<div class="panel-body">
+													<div class="form-inline">
+														<div class="form-group">
+															<input type="text"
+																ng-model="newGroupName"
+																class="form-control"
+																placeholder="new group name"
+															>
+															<button ng-disabled="!newGroupName"
+																ng-click="addNewGroup()"
+																class="form-control btn btn-primary"
+															>
+																<span class="glyphicon glyphicon-ok"></span>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-info" ng-repeat="group in models.ap">
+												<div class="panel-heading" ng-if="$index !== models.ap.length-1">
+													<div class="row">
+														<div class="panel-title col-md-10">
+															<div>
+																Group {{ group.group }}
+															</div>
+															<!-- <div class="form-inline">
+																<label for="group-name-{{$index}}">Group</label>
+																<input type="text" ng-model="group.group" id="group-name-{{$index}}" class="form-control">
+															</div> -->
+														</div>
+														<div class="col-md-2 text-right">
+															<div class="btn-group">
+																<button
+																	class="btn btn-default btn-xs"
+																	ng-click="removeGroup($index)"
+																>
+																	<span class="glyphicon glyphicon-remove text-danger"></span>
+																</button>
+															</div>
+															<div class="btn-group">
+																<button
+																	ng-disabled="models.ap.length <= 2 || $index === 0"
+																	class="btn btn-default btn-xs"
+																	ng-click="moveGroupUp($index)"
+																>
+																	<span class="glyphicon glyphicon-arrow-up"></span>
+																</button>
+																<button
+																	class="btn btn-default btn-xs"
+																	ng-disabled="models.ap.length <= 2 || $index === models.ap.length-2"
+																	ng-click="moveGroupDown($index)"
+																>
+																	<span class="glyphicon glyphicon-arrow-down"></span>
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="panel-heading" ng-if="$index === models.ap.length-1">
+													<div class="panel-title">Ungrouped</div>
+												</div>
+												<div class="panel-body">
+													<!-- The dnd-list directive allows to drop elements into it.
+														 The dropped data will be added to the referenced list -->
+													<ul dnd-list="group.properties"
+														dnd-drop="apAdded(item)"
+														dnd-allowed-types="['ap','property']"
+													>
+														<!-- The dnd-draggable directive makes an element draggable and will
+															 transfer the object that was assigned to it. If an element was
+															 dragged away, you have to remove it from the original list
+															 yourself using the dnd-moved attribute -->
+														<li ng-repeat="item in group.properties"
+															dnd-draggable="item"
+															dnd-type="item.type"
+															dnd-moved="group.properties.splice($index, 1)"
+															dnd-effect-allowed="move"
+														>
+															{{item.name}}
+															<sup class="text-warning" ng-if="item.expired">
+																<span class="glyphicon glyphicon-alert"></span> expired
+															</sup>
+															<dnd-nodrag>
+																<div class="pull-right">
+																	<div class="btn-group">
+																		<label class="btn btn-xs btn-default" ng-model="item.readOnly" uib-btn-checkbox uib-tooltip="read only">RO</label>
+																		<label class="btn btn-xs btn-default" ng-model="item.nullable" uib-btn-checkbox uib-tooltip="nullable">N</label>
+																	</div>
+																</div>
+															</dnd-nodrag>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Generated Model</h3>
+						</div>
+						<div class="panel-body">
+							<pre class="code">{{modelAsJson}}</pre>
+						</div>
+					</div>
+				</div>
+		
+			</div>
+		</div>
+	</div>
+
+</div>

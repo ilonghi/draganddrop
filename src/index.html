@@ -7,7 +7,12 @@
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css">
 
+<link rel="stylesheet" href="css/api-art.css">
 <link rel="stylesheet" href="css/activity-property-config.css">
+
+<!-- 
+<link rel="stylesheet" href="dist/api-art.css">
+ -->
 
 </head>
 <body style="padding-top: 30px">
@@ -15,10 +20,10 @@
 <div ng-app="sApp" ng-controller="sCtrl" class="container-fluid">
 
   <api-art-activity-property-config
-    activity-type="S_GIACENZA_MATERIALE"
+    activity-type="TT"
   ></api-art-activity-property-config>
   	
-	<sirti-alert></sirti-alert>
+  <sirti-alert></sirti-alert>
 
 </div>
 
@@ -26,6 +31,7 @@
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
@@ -34,8 +40,13 @@
 <script src="bower_components/underscore/underscore-min.js"></script>
 
 <script src="api-art.js"></script>
+<script src="scripts/services/api-art.js"></script>
 <script src="scripts/directives/activity-property-config.js"></script>
 
+<!-- 
+<script src="../dist/api-art.js"></script>
+
+ -->
 <script src="app.js"></script>
 
 </body>

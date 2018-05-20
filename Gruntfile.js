@@ -62,6 +62,10 @@ module.exports = function(grunt) {
 						return [
 							connect.static('./src'),
 							connect().use(
+								'/dist',
+								connect.static('./dist')
+							),
+							connect().use(
 								'/bower_components',
 								connect.static('./bower_components')
 							)

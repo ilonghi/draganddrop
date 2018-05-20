@@ -7,12 +7,17 @@
     .module('api-art', [
       'dndLists',
       'ngAnimate',
+      'ngResource',
       'ngSanitize',
       'ui.bootstrap',
       'sirti-alert'
     ])
 
     .provider('apiArtConfig', function () {
+      this.wsartRoutesPrefix = '/api/art/';
+      this.setWsartRoutesPrefix = function(prefix) {
+        this.wsartRoutesPrefix = prefix;
+      };
       this.$get = function () {
         return this;
       };
@@ -37,133 +42,67 @@
     a.push(tmp);
   }
   
-  function activityPropertyConfigCtrl($scope, sirtiAlert) {
+  function activityPropertyConfigCtrl($scope, $q, $uibModal, $timeout, apiArtInstanceActivityTypePropertiesService, apiArtInstanceActivityTypeActivityPropertiesService, sirtiAlert) {
 
-    var allProperties = [
-      'END_DATE',
-      'ENGAGE_DESCRIPTION',
-      'ESTIMATED_EFFORT',
-      'ESTIMATED_EFFORT_OUTLOOK',
-      'ID_EPRL',
-      'PROJECT_COMMESSA',
-      'REASON',
-      'RESOURCE',
-      'RESOURCE_ENGAGE_DESC',
-      'RESOURCE_ENGAGE_END_DATE',
-      'RESOURCE_ENGAGE_SHORT_DESC',
-      'RESOURCE_ENGAGE_START_DATE',
-      'RESOURCE_LIST',
-      'RESOURCE_LIST_BL',
-      'RESOURCE_LIST_OG',
-      'RESOURCE_REVOKE',
-      'SCOPE'
-    ];
-    
+    $scope.loadOk = false;
+
+    // FIXME: rendere un servizio il modal loading
+    var modalInstance = $uibModal.open({
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'modal-loading.html',
+      keyboard: false,
+      backdrop: 'static'
+    });
+
+    var allProperties = [];
+
     $scope.models = {
-      ap: [
-        {
-          'group': 'GROUP_1',
-          'id' : 1,
-          'properties': [
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'END_DATE',
-              'nullable':true
-            },
-            {
-              'expired':false,
-              'readOnly':true,
-              'name':'ENGAGE_DESCRIPTION',
-              'nullable':false
-            }
-          ]
-        },
-        {
-          'group': 'GROUP_2',
-          'id' : 2,
-          'properties': [
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'ESTIMATED_EFFORT',
-              'nullable':false
-            },
-            {
-              'expired':true,
-              'readOnly':false,
-              'name':'ESTIMATED_EFFORT_OUTLOOK',
-              'nullable':false
-            }
-          ]
-        },
-        {
-          'group': 'GROUP_3',
-          'id' : 3,
-          'properties': [
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'RESOURCE_LIST',
-              'nullable':false
-            },
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'RESOURCE_LIST_BL',
-              'nullable':false
-            }
-          ]
-        },
-        {
-          'properties':[
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'ACCOUNTED_EFFORT',
-              'nullable':false
-            },
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'CATEGORY_LIST',
-              'nullable':false
-            },
-            {
-              'expired':false,
-              'readOnly':false,
-              'name':'COMPETENCE_CENTER_MANAGER',
-              'nullable':false
-            }
-          ]
-        }
-      ],
+      ap: [],
       properties: []
     };
 
     $scope.newGroupName = undefined;
 
-    _.each(allProperties, function(p) {
-      var property = {
-        name: p,
-        readOnly: false,
-        nullable: false,
-        expired: false,
-        type: 'property'
-      };
-      var found = false;
-      _.each($scope.models.ap, function(group) {
-        _.each(group.properties, function(ap) {
-          ap.type = 'ap';
-          if(ap.name === property.name) {
-            found = true;
+    var promises = [
+      apiArtInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
+      apiArtInstanceActivityTypeActivityPropertiesService.get({ TYPE: $scope.activityType }).$promise
+    ];
+
+    $q.all(promises)
+      .then(function(responses) {
+        modalInstance.close();
+        $scope.loadOk = true;
+        // FIXME: ????
+        delete responses[0].$promise;
+        delete responses[0].$resolved;
+        allProperties = _.keys(responses[0]);
+        $scope.models.ap = responses[1];
+        _.each(allProperties, function(p) {
+          var property = {
+            name: p,
+            readOnly: false,
+            nullable: false,
+            expired: false,
+            type: 'property'
+          };
+          var found = false;
+          _.each($scope.models.ap, function(group) {
+            _.each(group.properties, function(ap) {
+              ap.type = 'ap';
+              if(ap.name === property.name) {
+                found = true;
+              }
+            });
+          });
+          if(!found) {
+            $scope.models.properties.push(property);
           }
         });
+      })
+      .catch(function(err) {
+        modalInstance.close();
+        sirtiAlert.fatal(err.data, { referenceId: 'load-ko' });
       });
-      if(!found) {
-        $scope.models.properties.push(property);
-      }
-    });
 
     $scope.apAdded = function(item) {
       item.type = 'ap';
@@ -215,6 +154,20 @@
       sirtiAlert.success('Group ' + groupName + ' successfully removed');
     };
 
+    $scope.save = function() {
+      var modalInstance = $uibModal.open({
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'modal-loading.html',
+        keyboard: false,
+        backdrop: 'static'
+      });
+      // FIXME: implementare
+      $timeout(function() {
+        modalInstance.close();
+        sirtiAlert.error('Not yet implemented!');
+      }, 2000);
+    };
+
     // Model to JSON for demo purpose
     $scope.$watch('models', function(model) {
       $scope.modelAsJson = angular.toJson(model, true);
@@ -245,13 +198,65 @@
   ;
 
 })();
+(function() {
+
+  'use strict';
+
+  angular
+
+    .module('api-art')
+
+    .factory('apiArtInstanceActivityTypePropertiesService', function($resource, apiArtConfig) {
+      return $resource(apiArtConfig.wsartRoutesPrefix + 'instance/types/activities/:TYPE/properties',
+        {},
+        {
+          get : {
+            method : 'GET',
+            params : {},
+            withCredentials : true
+          }
+        },
+        {
+          stripTrailingSlashes : true
+        }
+      );
+    })
+
+    .factory('apiArtInstanceActivityTypeActivityPropertiesService', function($resource, apiArtConfig) {
+      return $resource(apiArtConfig.wsartRoutesPrefix + 'instance/types/activities/:TYPE/activityProperties',
+        {},
+        {
+          get : {
+            method : 'GET',
+            params : {},
+            isArray: true,
+            withCredentials : true
+          }
+        },
+        {
+          stripTrailingSlashes : true
+        }
+      );
+    })
+
+  ;
+
+})();
 angular.module('api-art').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('views/directives/activity-property-config.html',
     "<div class=\"container-fluid\">\n" +
     "\n" +
-    "\t<div class=\"panel panel-primary\">\n" +
+    "  <script type=\"text/ng-template\" id=\"modal-loading.html\">\n" +
+    "    <div class=\"modal-body\">\n" +
+    "        <span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>\n" +
+    "    </div>\n" +
+    "  </script>\n" +
+    "\n" +
+    "  <sirti-alert inline=\"true\" reference=\"load-ko\"></sirti-alert>\n" +
+    "\n" +
+    "\t<div class=\"panel panel-primary\" ng-show=\"loadOk\">\n" +
     "\t\t<div class=\"panel-heading\">\n" +
     "\t\t\t<h1 class=\"panel-title\">Activity type {{ activityType }}</h1>\n" +
     "\t\t</div>\n" +
@@ -259,7 +264,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\n" +
     "\t\t\t<div class=\"row\">\n" +
     "\t\t\t\n" +
-    "\t\t\t\t<div class=\"col-md-8\">\n" +
+    "\t\t\t\t<div class=\"col-md-12\">\n" +
     "\t\t\t\t\t<div class=\"row\">\n" +
     "\t\t\t\t\t\t<div class=\"col-md-4\">\n" +
     "\t\t\t\t\t\t\t<div class=\"panel panel-primary\">\n" +
@@ -404,7 +409,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\n" +
     "\t\t\t\t</div>\n" +
     "\t\t\t\t\n" +
-    "\t\t\t\t<div class=\"col-md-4\">\n" +
+    "\t\t\t\t<!-- <div class=\"col-md-4\">\n" +
     "\t\t\t\t\t<div class=\"panel panel-default\">\n" +
     "\t\t\t\t\t\t<div class=\"panel-heading\">\n" +
     "\t\t\t\t\t\t\t<h3 class=\"panel-title\">Generated Model</h3>\n" +
@@ -413,10 +418,23 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t<pre class=\"code\">{{modelAsJson}}</pre>\n" +
     "\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t</div>\n" +
-    "\t\t\t\t</div>\n" +
+    "\t\t\t\t</div> -->\n" +
     "\t\t\n" +
     "\t\t\t</div>\n" +
     "\t\t</div>\n" +
+    "\n" +
+    "    <div class=\"panel-footer\">\n" +
+    "      <div class=\"row\">\n" +
+    "        <div class=\"col-md-12 text-right\">\n" +
+    "          <button class=\"btn btn-primary btn-lg\"\n" +
+    "            ng-click=\"save()\"\n" +
+    "          >\n" +
+    "            Save\n" +
+    "          </button>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
     "\t</div>\n" +
     "\n" +
     "</div>\n"

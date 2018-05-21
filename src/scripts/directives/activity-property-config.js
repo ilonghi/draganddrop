@@ -122,11 +122,11 @@
       $scope.editingGroupName = false;
       $scope.editingGroupNameIdx = undefined;
       $scope.origGroupName = undefined;
-    }
+    };
 
     $scope.resetGroupName = function(index) {
       $scope.models.ap[index].group = $scope.origGroupName;
-    }
+    };
 
     $scope.moveGroupUp = function(index) {
       swapElements($scope.models.ap, index, index-1);

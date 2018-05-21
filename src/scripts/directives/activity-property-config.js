@@ -73,7 +73,7 @@
       })
       .catch(function(err) {
         modalInstance.close();
-        sirtiAlert.fatal(err.data, { referenceId: 'load-ko' });
+        sirtiAlert.fatal(err, { referenceId: 'load-ko' });
       });
 
     $scope.apAdded = function(item) {

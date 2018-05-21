@@ -29,6 +29,7 @@
 									<ul dnd-list="models.properties"
 										dnd-drop="apRemoved(item)"
 										dnd-allowed-types="['ap']"
+										dnd-disable-if="editingGroupName"
 									>
 										<!-- The dnd-draggable directive makes an element draggable and will
 											 transfer the object that was assigned to it. If an element was
@@ -66,7 +67,7 @@
 																class="form-control"
 																placeholder="new group name"
 															>
-															<button ng-disabled="!newGroupName"
+															<button ng-disabled="!newGroupName || editingGroupName"
 																ng-click="addNewGroup()"
 																class="form-control btn btn-primary"
 															>
@@ -80,26 +81,48 @@
 												<div class="panel-heading" ng-if="$index !== models.ap.length-1">
 													<div class="row">
 														<div class="panel-title col-md-10">
-															<div>
+															<div ng-show="editingGroupNameIdx !== $index">
 																Group {{ group.group }}
 															</div>
-															<!-- <div class="form-inline">
-																<label for="group-name-{{$index}}">Group</label>
-																<input type="text" ng-model="group.group" id="group-name-{{$index}}" class="form-control">
-															</div> -->
+															<div ng-show="editingGroupNameIdx === $index"
+																class="form-inline"
+															>
+																Group
+																<input type="text" ng-model="group.group" class="form-control">
+																<button ng-disabled="!group.group"
+																	ng-click="editingGroupNameDone()"
+																	class="form-control btn btn-primary"
+																>
+																	<span class="glyphicon glyphicon-ok"></span>
+																</button>
+																<button
+																	ng-click="resetGroupName($index)"
+																	class="form-control btn btn-primary"
+																>
+																	<span class="glyphicon glyphicon-remove"></span>
+																</button>
+															</div>
 														</div>
 														<div class="col-md-2 text-right">
 															<div class="btn-group">
 																<button
 																	class="btn btn-default btn-xs"
-																	ng-click="removeGroup($index)"
+																	ng-click="setEditingGroupName($index)"
+																	ng-disabled="editingGroupName"
 																>
-																	<span class="glyphicon glyphicon-remove text-danger"></span>
+																	<span class="glyphicon glyphicon-pencil"></span>
+																</button>
+																<button
+																	class="btn btn-default btn-xs"
+																	ng-click="removeGroup($index)"
+																	ng-disabled="editingGroupName"
+																>
+																	<span class="glyphicon glyphicon-trash"></span>
 																</button>
 															</div>
 															<div class="btn-group">
 																<button
-																	ng-disabled="models.ap.length <= 2 || $index === 0"
+																	ng-disabled="models.ap.length <= 2 || $index === 0 || editingGroupName"
 																	class="btn btn-default btn-xs"
 																	ng-click="moveGroupUp($index)"
 																>
@@ -107,7 +130,7 @@
 																</button>
 																<button
 																	class="btn btn-default btn-xs"
-																	ng-disabled="models.ap.length <= 2 || $index === models.ap.length-2"
+																	ng-disabled="models.ap.length <= 2 || $index === models.ap.length-2 || editingGroupName"
 																	ng-click="moveGroupDown($index)"
 																>
 																	<span class="glyphicon glyphicon-arrow-down"></span>
@@ -125,6 +148,7 @@
 													<ul dnd-list="group.properties"
 														dnd-drop="apAdded(item)"
 														dnd-allowed-types="['ap','property']"
+														dnd-disable-if="editingGroupName"
 													>
 														<!-- The dnd-draggable directive makes an element draggable and will
 															 transfer the object that was assigned to it. If an element was
@@ -143,8 +167,8 @@
 															<dnd-nodrag>
 																<div class="pull-right">
 																	<div class="btn-group">
-																		<label class="btn btn-xs btn-default" ng-model="item.readOnly" uib-btn-checkbox uib-tooltip="read only">RO</label>
-																		<label class="btn btn-xs btn-default" ng-model="item.nullable" uib-btn-checkbox uib-tooltip="nullable">N</label>
+																		<label class="btn btn-xs btn-default" ng-model="item.readOnly" uib-btn-checkbox uib-tooltip="read only" ng-disabled="editingGroupName">RO</label>
+																		<label class="btn btn-xs btn-default" ng-model="item.nullable" uib-btn-checkbox uib-tooltip="nullable" ng-disabled="editingGroupName">N</label>
 																	</div>
 																</div>
 															</dnd-nodrag>
@@ -180,6 +204,7 @@
 				<div class="col-md-12 text-right">
 					<button class="btn btn-primary btn-lg"
 						ng-click="save()"
+						ng-disabled="editingGroupName"
 					>
 						Save
 					</button>

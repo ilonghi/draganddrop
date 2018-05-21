@@ -34,6 +34,9 @@
     };
 
     $scope.newGroupName = undefined;
+    $scope.editingGroupName = false;
+    $scope.editingGroupNameIdx = undefined;
+    $scope.origGroupName = undefined;
 
     var promises = [
       apiArtInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
@@ -108,6 +111,22 @@
       sirtiAlert.success('Group ' + $scope.newGroupName + ' successfully added');
       $scope.newGroupName = undefined;
     };
+
+    $scope.setEditingGroupName = function(index) {
+      $scope.editingGroupName = true;
+      $scope.editingGroupNameIdx = index;
+      $scope.origGroupName = $scope.models.ap[index].group;
+    };
+
+    $scope.editingGroupNameDone = function() {
+      $scope.editingGroupName = false;
+      $scope.editingGroupNameIdx = undefined;
+      $scope.origGroupName = undefined;
+    }
+
+    $scope.resetGroupName = function(index) {
+      $scope.models.ap[index].group = $scope.origGroupName;
+    }
 
     $scope.moveGroupUp = function(index) {
       swapElements($scope.models.ap, index, index-1);

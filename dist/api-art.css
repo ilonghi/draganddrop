@@ -42,10 +42,17 @@ api-art-activity-property-config ul[dnd-list] li {
     margin-bottom: -1px;
 }
 
-.glyphicon-refresh-animate {
-    -webkit-animation:spin 1s linear infinite;
-    -moz-animation:spin 1s linear infinite;
-    animation:spin 1s linear infinite;
+.api-art-loading-modal {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  font-size: 80px;
+  color: #CCCCCC	
+}
+
+.api-art-glyphicon-animate {
+  -webkit-animation:spin 1s linear infinite;
+  -moz-animation:spin 1s linear infinite;
+  animation:spin 1s linear infinite;
 }
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }

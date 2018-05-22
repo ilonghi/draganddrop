@@ -14,17 +14,19 @@
     a.push(tmp);
   }
   
-  function activityPropertyConfigCtrl($scope, $q, $uibModal, $timeout, apiArtInstanceActivityTypePropertiesService, apiArtInstanceActivityTypeActivityPropertiesService, sirtiAlert) {
+  function activityPropertyConfigCtrl(
+      $scope,
+      $q,
+      $timeout,
+      apiArtInstanceActivityTypePropertiesService,
+      apiArtInstanceActivityTypeActivityPropertiesService,
+      apiArtLoadingModal,
+      sirtiAlert
+    ) {
 
     $scope.loadOk = false;
 
-    // FIXME: rendere un servizio il modal loading
-    var modalInstance = $uibModal.open({
-      ariaDescribedBy: 'modal-body',
-      templateUrl: 'modal-loading.html',
-      keyboard: false,
-      backdrop: 'static'
-    });
+    var loadingModal = apiArtLoadingModal.open();
 
     var allProperties = [];
 
@@ -45,7 +47,7 @@
 
     $q.all(promises)
       .then(function(responses) {
-        modalInstance.close();
+        loadingModal.close();
         $scope.loadOk = true;
         // FIXME: ????
         delete responses[0].$promise;
@@ -75,7 +77,7 @@
         });
       })
       .catch(function(err) {
-        modalInstance.close();
+        loadingModal.close();
         sirtiAlert.fatal(err, { referenceId: 'load-ko' });
       });
 
@@ -146,15 +148,10 @@
     };
 
     $scope.save = function() {
-      var modalInstance = $uibModal.open({
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'modal-loading.html',
-        keyboard: false,
-        backdrop: 'static'
-      });
+      var loadingModal = apiArtLoadingModal.open();
       // FIXME: implementare
       $timeout(function() {
-        modalInstance.close();
+        loadingModal.close();
         sirtiAlert.error('Not yet implemented!');
       }, 2000);
     };

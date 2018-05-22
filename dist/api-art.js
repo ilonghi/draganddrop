@@ -42,17 +42,19 @@
     a.push(tmp);
   }
   
-  function activityPropertyConfigCtrl($scope, $q, $uibModal, $timeout, apiArtInstanceActivityTypePropertiesService, apiArtInstanceActivityTypeActivityPropertiesService, sirtiAlert) {
+  function activityPropertyConfigCtrl(
+      $scope,
+      $q,
+      $timeout,
+      apiArtInstanceActivityTypePropertiesService,
+      apiArtInstanceActivityTypeActivityPropertiesService,
+      apiArtLoadingModal,
+      sirtiAlert
+    ) {
 
     $scope.loadOk = false;
 
-    // FIXME: rendere un servizio il modal loading
-    var modalInstance = $uibModal.open({
-      ariaDescribedBy: 'modal-body',
-      templateUrl: 'modal-loading.html',
-      keyboard: false,
-      backdrop: 'static'
-    });
+    var loadingModal = apiArtLoadingModal.open();
 
     var allProperties = [];
 
@@ -62,6 +64,9 @@
     };
 
     $scope.newGroupName = undefined;
+    $scope.editingGroupName = false;
+    $scope.editingGroupNameIdx = undefined;
+    $scope.origGroupName = undefined;
 
     var promises = [
       apiArtInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
@@ -70,7 +75,7 @@
 
     $q.all(promises)
       .then(function(responses) {
-        modalInstance.close();
+        loadingModal.close();
         $scope.loadOk = true;
         // FIXME: ????
         delete responses[0].$promise;
@@ -100,8 +105,8 @@
         });
       })
       .catch(function(err) {
-        modalInstance.close();
-        sirtiAlert.fatal(err.data, { referenceId: 'load-ko' });
+        loadingModal.close();
+        sirtiAlert.fatal(err, { referenceId: 'load-ko' });
       });
 
     $scope.apAdded = function(item) {
@@ -137,6 +142,22 @@
       $scope.newGroupName = undefined;
     };
 
+    $scope.setEditingGroupName = function(index) {
+      $scope.editingGroupName = true;
+      $scope.editingGroupNameIdx = index;
+      $scope.origGroupName = $scope.models.ap[index].group;
+    };
+
+    $scope.editingGroupNameDone = function() {
+      $scope.editingGroupName = false;
+      $scope.editingGroupNameIdx = undefined;
+      $scope.origGroupName = undefined;
+    };
+
+    $scope.resetGroupName = function(index) {
+      $scope.models.ap[index].group = $scope.origGroupName;
+    };
+
     $scope.moveGroupUp = function(index) {
       swapElements($scope.models.ap, index, index-1);
     };
@@ -155,15 +176,10 @@
     };
 
     $scope.save = function() {
-      var modalInstance = $uibModal.open({
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'modal-loading.html',
-        keyboard: false,
-        backdrop: 'static'
-      });
+      var loadingModal = apiArtLoadingModal.open();
       // FIXME: implementare
       $timeout(function() {
-        modalInstance.close();
+        loadingModal.close();
         sirtiAlert.error('Not yet implemented!');
       }, 2000);
     };
@@ -185,7 +201,7 @@
       controller: activityPropertyConfigCtrl
     };
   }
-  
+
   angular
 
     .module('api-art')
@@ -242,19 +258,36 @@
   ;
 
 })();
+(function() {
+
+  'use strict';
+
+  angular
+
+    .module('api-art')
+
+    .service('apiArtLoadingModal', function($uibModal, sirtiAlert) {
+      this.open = function() {
+        sirtiAlert.clear();
+        return $uibModal.open({
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'views/loading-modal.html',
+          keyboard: false,
+          backdrop: 'static'
+        });
+      };
+    })
+
+  ;
+
+})();
 angular.module('api-art').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('views/directives/activity-property-config.html',
     "<div class=\"container-fluid\">\n" +
     "\n" +
-    "  <script type=\"text/ng-template\" id=\"modal-loading.html\">\n" +
-    "    <div class=\"modal-body\">\n" +
-    "        <span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>\n" +
-    "    </div>\n" +
-    "  </script>\n" +
-    "\n" +
-    "  <sirti-alert inline=\"true\" reference=\"load-ko\"></sirti-alert>\n" +
+    "\t<sirti-alert inline=\"true\" reference=\"load-ko\"></sirti-alert>\n" +
     "\n" +
     "\t<div class=\"panel panel-primary\" ng-show=\"loadOk\">\n" +
     "\t\t<div class=\"panel-heading\">\n" +
@@ -277,6 +310,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t<ul dnd-list=\"models.properties\"\n" +
     "\t\t\t\t\t\t\t\t\t\tdnd-drop=\"apRemoved(item)\"\n" +
     "\t\t\t\t\t\t\t\t\t\tdnd-allowed-types=\"['ap']\"\n" +
+    "\t\t\t\t\t\t\t\t\t\tdnd-disable-if=\"editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t>\n" +
     "\t\t\t\t\t\t\t\t\t\t<!-- The dnd-draggable directive makes an element draggable and will\n" +
     "\t\t\t\t\t\t\t\t\t\t\t transfer the object that was assigned to it. If an element was\n" +
@@ -314,7 +348,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"form-control\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tplaceholder=\"new group name\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button ng-disabled=\"!newGroupName\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button ng-disabled=\"!newGroupName || editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"addNewGroup()\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"form-control btn btn-primary\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
@@ -328,26 +362,48 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"panel-heading\" ng-if=\"$index !== models.ap.length-1\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"panel-title col-md-10\">\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div ng-show=\"editingGroupNameIdx !== $index\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tGroup {{ group.group }}\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<!-- <div class=\"form-inline\">\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"group-name-{{$index}}\">Group</label>\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" ng-model=\"group.group\" id=\"group-name-{{$index}}\" class=\"form-control\">\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div> -->\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div ng-show=\"editingGroupNameIdx === $index\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"form-inline\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tGroup\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" ng-model=\"group.group\" class=\"form-control\">\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button ng-disabled=\"!group.group\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"editingGroupNameDone()\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"form-control btn btn-primary\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-ok\"></span>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"resetGroupName($index)\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"form-control btn btn-primary\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-remove\"></span>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-md-2 text-right\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"btn-group\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"btn btn-default btn-xs\"\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"removeGroup($index)\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"setEditingGroupName($index)\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-remove text-danger\"></span>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-pencil\"></span>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"btn btn-default btn-xs\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"removeGroup($index)\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"editingGroupName\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-trash\"></span>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"btn-group\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"models.ap.length <= 2 || $index === 0\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"models.ap.length <= 2 || $index === 0 || editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"btn btn-default btn-xs\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"moveGroupUp($index)\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
@@ -355,7 +411,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</button>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<button\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tclass=\"btn btn-default btn-xs\"\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"models.ap.length <= 2 || $index === models.ap.length-2\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-disabled=\"models.ap.length <= 2 || $index === models.ap.length-2 || editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tng-click=\"moveGroupDown($index)\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-arrow-down\"></span>\n" +
@@ -373,6 +429,7 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t\t\t\t\t<ul dnd-list=\"group.properties\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\tdnd-drop=\"apAdded(item)\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\tdnd-allowed-types=\"['ap','property']\"\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\tdnd-disable-if=\"editingGroupName\"\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<!-- The dnd-draggable directive makes an element draggable and will\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t transfer the object that was assigned to it. If an element was\n" +
@@ -391,8 +448,8 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<dnd-nodrag>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"pull-right\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"btn-group\">\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label class=\"btn btn-xs btn-default\" ng-model=\"item.readOnly\" uib-btn-checkbox uib-tooltip=\"read only\">RO</label>\n" +
-    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label class=\"btn btn-xs btn-default\" ng-model=\"item.nullable\" uib-btn-checkbox uib-tooltip=\"nullable\">N</label>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label class=\"btn btn-xs btn-default\" ng-model=\"item.readOnly\" uib-btn-checkbox uib-tooltip=\"read only\" ng-disabled=\"editingGroupName\">RO</label>\n" +
+    "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label class=\"btn btn-xs btn-default\" ng-model=\"item.nullable\" uib-btn-checkbox uib-tooltip=\"nullable\" ng-disabled=\"editingGroupName\">N</label>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</dnd-nodrag>\n" +
@@ -423,21 +480,31 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t\t\t</div>\n" +
     "\t\t</div>\n" +
     "\n" +
-    "    <div class=\"panel-footer\">\n" +
-    "      <div class=\"row\">\n" +
-    "        <div class=\"col-md-12 text-right\">\n" +
-    "          <button class=\"btn btn-primary btn-lg\"\n" +
-    "            ng-click=\"save()\"\n" +
-    "          >\n" +
-    "            Save\n" +
-    "          </button>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
+    "\t\t<div class=\"panel-footer\">\n" +
+    "\t\t\t<div class=\"row\">\n" +
+    "\t\t\t\t<div class=\"col-md-12 text-right\">\n" +
+    "\t\t\t\t\t<button class=\"btn btn-primary btn-lg\"\n" +
+    "\t\t\t\t\t\tng-click=\"save()\"\n" +
+    "\t\t\t\t\t\tng-disabled=\"editingGroupName\"\n" +
+    "\t\t\t\t\t>\n" +
+    "\t\t\t\t\t\tSave\n" +
+    "\t\t\t\t\t</button>\n" +
+    "\t\t\t\t</div>\n" +
+    "\t\t\t</div>\n" +
+    "\t\t</div>\n" +
     "\n" +
     "\t</div>\n" +
     "\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('views/loading-modal.html',
+    "<div class=\"modal-dialog modal-sm text-center\">\n" +
+    "\t<div class=\"api-art-loading-modal\">\n" +
+    "\t\t<span class=\"glyphicon glyphicon-repeat api-art-glyphicon-animate\"></span>\n" +
+    "\t</div>\n" +
+    "</div>"
   );
 
 }]);

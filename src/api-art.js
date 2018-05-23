@@ -10,7 +10,7 @@
       'ngResource',
       'ngSanitize',
       'ui.bootstrap',
-      'sirti-alert'
+      'sirti-utils'
     ])
 
     .provider('apiArtConfig', function () {

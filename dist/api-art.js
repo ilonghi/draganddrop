@@ -10,7 +10,7 @@
       'ngResource',
       'ngSanitize',
       'ui.bootstrap',
-      'sirti-alert'
+      'sirti-utils'
     ])
 
     .provider('apiArtConfig', function () {
@@ -48,13 +48,13 @@
       $timeout,
       apiArtInstanceActivityTypePropertiesService,
       apiArtInstanceActivityTypeActivityPropertiesService,
-      apiArtLoadingModal,
+      sirtiLoadingModal,
       sirtiAlert
     ) {
 
     $scope.loadOk = false;
 
-    var loadingModal = apiArtLoadingModal.open();
+    var loadingModal = sirtiLoadingModal.open();
 
     var allProperties = [];
 
@@ -176,7 +176,7 @@
     };
 
     $scope.save = function() {
-      var loadingModal = apiArtLoadingModal.open();
+      var loadingModal = sirtiLoadingModal.open();
       // FIXME: implementare
       $timeout(function() {
         loadingModal.close();
@@ -253,29 +253,6 @@
           stripTrailingSlashes : true
         }
       );
-    })
-
-  ;
-
-})();
-(function() {
-
-  'use strict';
-
-  angular
-
-    .module('api-art')
-
-    .service('apiArtLoadingModal', function($uibModal, sirtiAlert) {
-      this.open = function() {
-        sirtiAlert.clear();
-        return $uibModal.open({
-          ariaDescribedBy: 'modal-body',
-          templateUrl: 'views/loading-modal.html',
-          keyboard: false,
-          backdrop: 'static'
-        });
-      };
     })
 
   ;
@@ -496,15 +473,6 @@ angular.module('api-art').run(['$templateCache', function($templateCache) {
     "\t</div>\n" +
     "\n" +
     "</div>\n"
-  );
-
-
-  $templateCache.put('views/loading-modal.html',
-    "<div class=\"modal-dialog modal-sm text-center\">\n" +
-    "\t<div class=\"api-art-loading-modal\">\n" +
-    "\t\t<span class=\"glyphicon glyphicon-repeat api-art-glyphicon-animate\"></span>\n" +
-    "\t</div>\n" +
-    "</div>"
   );
 
 }]);

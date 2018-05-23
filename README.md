@@ -52,6 +52,8 @@ E' inoltre necessario caricare le seguenti dipendenze:
 
 ## Documentation
 
+Puoi trovare esempi di utilizzo nei file `index.html` e `app.js` nella cartella `src`.
+
 ### Direttive
 
 #### api-art-activity-property-config
@@ -63,4 +65,4 @@ E' inoltre necessario caricare le seguenti dipendenze:
 
 ## License
 
-Copyright (c) 2017 Sirti S.p.A. - All rights reserved
+Copyright (c) 2018 Sirti S.p.A. - All rights reserved

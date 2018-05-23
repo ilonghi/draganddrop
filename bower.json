@@ -6,9 +6,9 @@
     "dist/api-art.css"
   ],
   "authors": [
-    "Ivan Longhi <i.longhi@sirti.it>",
+    "Ivan Longhi <i.longhi@ext.sirti.it>",
     "Alvaro Livraghi <a.livraghi@sirti.it>",
-    "Rizzardo Belotti <r.belotti@sirti.it>",
+    "Rizzardo Belotti <r.belotti@ext.sirti.it>",
     "Massimo Vasile <m.vasile@sirti.it>"
   ],
   "description": "TBD",
@@ -21,7 +21,7 @@
     "bootstrap": "^3.3.7",
     "angular-drag-and-drop-lists": "^2.1.0",
     "underscore": "^1.8.3",
-    "sirti-alert": "http://dvmas003.ict.sirti.net:10090/git/js-ng-sirtialert.git"
+    "sirti-utils": "http://dvmas003.ict.sirti.net:10090/git/js-ng-sirtiutils.git"
   },
   "keywords": [],
   "license": "MIT",

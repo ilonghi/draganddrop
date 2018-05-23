@@ -20,13 +20,13 @@
       $timeout,
       apiArtInstanceActivityTypePropertiesService,
       apiArtInstanceActivityTypeActivityPropertiesService,
-      apiArtLoadingModal,
+      sirtiLoadingModal,
       sirtiAlert
     ) {
 
     $scope.loadOk = false;
 
-    var loadingModal = apiArtLoadingModal.open();
+    var loadingModal = sirtiLoadingModal.open();
 
     var allProperties = [];
 
@@ -148,7 +148,7 @@
     };
 
     $scope.save = function() {
-      var loadingModal = apiArtLoadingModal.open();
+      var loadingModal = sirtiLoadingModal.open();
       // FIXME: implementare
       $timeout(function() {
         loadingModal.close();

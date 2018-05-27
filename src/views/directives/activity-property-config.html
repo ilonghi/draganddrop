@@ -4,6 +4,38 @@
 
 	<div class="panel panel-primary" ng-show="loadOk">
 		<div class="panel-heading">
+			<h3 class="panel-title">Groups</h3>
+		</div>
+		<div class="panel-body">
+			<ul id="" class="list-inline">
+				<li ng-repeat="group in models.apGroups">
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-8 text-left">
+									{{group}}
+								</div>
+								<div class="col-md-4 text-right">
+									<div class="btn-group">
+										<button
+											class="btn btn-default btn-xs"
+											ng-click="addExistingGroup(group)"
+											ng-disabled="editingGroupName"
+										>
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="panel panel-primary" ng-show="loadOk">
+		<div class="panel-heading">
 			<h1 class="panel-title">Activity type {{ activityType }}</h1>
 		</div>
 		<div class="panel-body">

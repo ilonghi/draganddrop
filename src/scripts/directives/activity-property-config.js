@@ -8,7 +8,7 @@
     a[y] = tmp;
   }
   
-  function insertBeforLastElement(a, x) {
+  function insertBeforeLastElement(a, x) {
     var tmp = a[a.length-1];
     a.splice(-1, 1, x);
     a.push(tmp);
@@ -20,6 +20,7 @@
       $timeout,
       apiArtInstanceActivityTypePropertiesService,
       apiArtInstanceActivityTypeActivityPropertiesService,
+      apiArtInstanceActivityPropertiesGroupsService,
       sirtiLoadingModal,
       sirtiAlert
     ) {
@@ -42,7 +43,8 @@
 
     var promises = [
       apiArtInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
-      apiArtInstanceActivityTypeActivityPropertiesService.get({ TYPE: $scope.activityType }).$promise
+      apiArtInstanceActivityTypeActivityPropertiesService.get({ TYPE: $scope.activityType }).$promise,
+      apiArtInstanceActivityPropertiesGroupsService.get().$promise
     ];
 
     $q.all(promises)
@@ -54,6 +56,7 @@
         delete responses[0].$resolved;
         allProperties = _.keys(responses[0]);
         $scope.models.ap = responses[1];
+        $scope.models.apGroups = responses[2];
         _.each(allProperties, function(p) {
           var property = {
             name: p,
@@ -74,6 +77,10 @@
           if(!found) {
             $scope.models.properties.push(property);
           }
+        });
+        // rimuovo dall'elenco dei gruppi quelli utilizzati
+        _.each($scope.models.ap, function(group) {
+          $scope.models.apGroups = _.without($scope.models.apGroups, group.group);
         });
       })
       .catch(function(err) {
@@ -101,12 +108,11 @@
     };
 
     $scope.addNewGroup = function() {
-      if(_.findWhere($scope.models.ap, { group: $scope.newGroupName })) {
-        sirtiAlert.error('A group named ' + $scope.newGroupName + ' already exists');
-        $scope.newGroupName = undefined;
+      if(_.findWhere($scope.models.ap, { group: $scope.newGroupName }) || $scope.models.apGroups.indexOf($scope.newGroupName) !== -1) {
+        sirtiAlert.warning('A group named ' + $scope.newGroupName + ' already exists');
         return;
       }
-      insertBeforLastElement($scope.models.ap, {
+      insertBeforeLastElement($scope.models.ap, {
         group: $scope.newGroupName,
         properties: []
       });
@@ -121,6 +127,23 @@
     };
 
     $scope.editingGroupNameDone = function() {
+      var ko = false;
+      for(var i = 0; i < $scope.models.ap.length; i++) {
+        if(i === $scope.editingGroupNameIdx) {
+          continue;
+        }
+        if($scope.models.ap[i].group === $scope.models.ap[$scope.editingGroupNameIdx].group) {
+          ko = true;
+          break;
+        }
+      }
+      if($scope.models.apGroups.indexOf($scope.models.ap[$scope.editingGroupNameIdx].group) !== -1) {
+        ko = true;
+      }
+      if(ko) {
+        sirtiAlert.warning('A group named ' + $scope.models.ap[$scope.editingGroupNameIdx].group + ' already exists');
+        return;
+      }
       $scope.editingGroupName = false;
       $scope.editingGroupNameIdx = undefined;
       $scope.origGroupName = undefined;
@@ -128,6 +151,9 @@
 
     $scope.resetGroupName = function(index) {
       $scope.models.ap[index].group = $scope.origGroupName;
+      $scope.editingGroupName = false;
+      $scope.editingGroupNameIdx = undefined;
+      $scope.origGroupName = undefined;
     };
 
     $scope.moveGroupUp = function(index) {
@@ -144,7 +170,19 @@
         $scope.models.properties.push(item);
       });
       $scope.models.ap.splice(index, 1);
+      // inserisco il nome del gruppo nell'array dei gruppi in modo che l'array resti ordinato
+      // http://underscorejs.org/#sortedIndex
+      $scope.models.apGroups.splice(_.sortedIndex($scope.models.apGroups, groupName), 0, groupName);
       sirtiAlert.success('Group ' + groupName + ' successfully removed');
+    };
+
+    $scope.addExistingGroup = function(groupName) {
+      insertBeforeLastElement($scope.models.ap, {
+        group: groupName,
+        properties: []
+      });
+      $scope.models.apGroups.splice($scope.models.apGroups.indexOf(groupName), 1);
+      sirtiAlert.success('Group ' + groupName + ' successfully added');
     };
 
     $scope.save = function() {

@@ -39,6 +39,23 @@
       );
     })
 
+    .factory('apiArtInstanceActivityPropertiesGroupsService', function($resource, apiArtConfig) {
+      return $resource(apiArtConfig.wsartRoutesPrefix + 'instance/types/activityProperties/groups',
+        {},
+        {
+          get : {
+            method : 'GET',
+            params : {},
+            isArray: true,
+            withCredentials : true
+          }
+        },
+        {
+          stripTrailingSlashes : true
+        }
+      );
+    })
+
   ;
 
 })();

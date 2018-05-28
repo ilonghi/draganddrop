@@ -56,6 +56,9 @@
         delete responses[0].$resolved;
         allProperties = _.keys(responses[0]);
         $scope.models.ap = responses[1];
+        if($scope.models.ap.length === 0) {
+          $scope.models.ap.push({ properties: [] });
+        }
         $scope.models.apGroups = responses[2];
         _.each(allProperties, function(p) {
           var property = {

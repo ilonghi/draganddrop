@@ -31,6 +31,11 @@
             params : {},
             isArray: true,
             withCredentials : true
+          },
+          modify : {
+            method : 'PUT',
+            params : {},
+            withCredentials : true
           }
         },
         {

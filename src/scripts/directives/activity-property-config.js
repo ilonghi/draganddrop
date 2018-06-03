@@ -59,7 +59,10 @@
         if($scope.models.ap.length === 0) {
           $scope.models.ap.push({ properties: [] });
         }
-        $scope.models.apGroups = responses[2];
+        $scope.models.apGroups = [];
+        _.each(responses[2], function(item) {
+          $scope.models.apGroups.push(item.name);
+        });
         _.each(allProperties, function(p) {
           var property = {
             name: p,
@@ -190,11 +193,19 @@
 
     $scope.save = function() {
       var loadingModal = sirtiLoadingModal.open();
-      // FIXME: implementare
-      $timeout(function() {
-        loadingModal.close();
-        sirtiAlert.error('Not yet implemented!');
-      }, 2000);
+      apiArtInstanceActivityTypeActivityPropertiesService.modify({ TYPE: $scope.activityType }, { ap: $scope.models.ap }).$promise
+        .then(function(result) {
+          loadingModal.close();
+          sirtiAlert.success('Activity property successfully saved');
+        })
+        .catch(function(err) {
+          loadingModal.close();
+          sirtiAlert.error(err);
+        });
+      // $timeout(function() {
+      //   loadingModal.close();
+      //   sirtiAlert.error('Not yet implemented!');
+      // }, 2000);
     };
 
     // Model to JSON for demo purpose

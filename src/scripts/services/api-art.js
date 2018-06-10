@@ -6,6 +6,12 @@
 
     .module('api-art')
 
+    .factory('apiArtIsAuthenticated', function($auth) {
+      return function() {
+        return $auth.isAuthenticated();
+      };
+    })
+
     .factory('apiArtInstanceActivityTypePropertiesService', function($resource, apiArtConfig) {
       return $resource(apiArtConfig.wsartRoutesPrefix + 'instance/types/activities/:TYPE/properties',
         {},

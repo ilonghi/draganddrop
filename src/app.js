@@ -32,8 +32,8 @@ angular
     });
 })
 
-.controller('sCtrl', function() {
-
+.controller('sCtrl', function(apiArtLoginModal) {
+  apiArtLoginModal.open();
 })
 
 ;

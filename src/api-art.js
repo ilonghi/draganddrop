@@ -15,26 +15,15 @@
     ])
 
     .config(function($authProvider, apiArtConfigProvider) {
-      $authProvider.authHeader = 'X-JWT-Authorization';
-      $authProvider.authToken = 'JWT';
-      $authProvider.withCredentials = false;
-      /*
-       * sessionStorage will only be accessible while and by the window that created it is open.
-       * localStorage lasts until you delete it or the user deletes it.
-       */
-      $authProvider.storageType = 'sessionStorage';
-
       $authProvider.tokenHeader = 'X-JWT-Authorization';
       $authProvider.tokenType = 'JWT';
       $authProvider.withCredentials = false;
+      $authProvider.loginUrl = apiArtConfigProvider.wsartLoginUrl;
       /*
        * sessionStorage will only be accessible while and by the window that created it is open.
        * localStorage lasts until you delete it or the user deletes it.
        */
       $authProvider.storageType = 'sessionStorage';
-      
-      //$authProvider.loginUrl = 'http://localhost/wphdtfows/api/art/sessions';
-      $authProvider.loginUrl = apiArtConfigProvider.wsartLoginUrl;
     })
 
     .provider('apiArtConfig', function($authProvider) {

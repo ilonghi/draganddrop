@@ -18,9 +18,11 @@
       $scope,
       $q,
       $timeout,
+      $window,
       apiArtInstanceActivityTypePropertiesService,
       apiArtInstanceActivityTypeActivityPropertiesService,
       apiArtInstanceActivityPropertiesGroupsService,
+      apiArtLoginModal,
       sirtiLoadingModal,
       sirtiAlert
     ) {
@@ -91,7 +93,14 @@
       })
       .catch(function(err) {
         loadingModal.close();
-        sirtiAlert.fatal(err, { referenceId: 'load-ko' });
+        if(err.status === 401) {
+          apiArtLoginModal.open()
+            .then(function() {
+              $window.location.reload();
+            });
+        } else {
+          sirtiAlert.fatal(err, { referenceId: 'load-ko' });
+        }
       });
 
     $scope.apAdded = function(item) {

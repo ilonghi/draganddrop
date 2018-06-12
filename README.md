@@ -35,6 +35,7 @@ E' inoltre necessario caricare le seguenti dipendenze:
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css">
+<link rel="stylesheet" href="bower_components/sirti-utils/dist/sirti-utils.css">
 
 <!-- scripts -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -45,9 +46,10 @@ E' inoltre necessario caricare le seguenti dipendenze:
 <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
-<script src="bower_components/sirti-alert/dist/sirti-alert.js"></script>
 <script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
 <script src="bower_components/underscore/underscore-min.js"></script>
+<script src="bower_components/satellizer/dist/satellizer.min.js"></script>
+<script src="bower_components/sirti-utils/dist/sirti-utils.js"></script>
 ```
 
 ## Documentation

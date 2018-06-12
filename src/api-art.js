@@ -14,7 +14,7 @@
       'sirti-utils'
     ])
 
-    .config(function ($authProvider) {
+    .config(function($authProvider, apiArtConfigProvider) {
       $authProvider.authHeader = 'X-JWT-Authorization';
       $authProvider.authToken = 'JWT';
       $authProvider.withCredentials = false;
@@ -33,13 +33,18 @@
        */
       $authProvider.storageType = 'sessionStorage';
       
-      $authProvider.loginUrl = 'http://localhost/wphdtfows/api/art/sessions';
+      //$authProvider.loginUrl = 'http://localhost/wphdtfows/api/art/sessions';
+      $authProvider.loginUrl = apiArtConfigProvider.wsartLoginUrl;
     })
 
-    .provider('apiArtConfig', function () {
+    .provider('apiArtConfig', function($authProvider) {
       this.wsartRoutesPrefix = '/api/art/';
+      this.wsartLoginUrl = this.wsartRoutesPrefix + 'sessions';
       this.setWsartRoutesPrefix = function(prefix) {
-        this.wsartRoutesPrefix = prefix;
+        // aggiungo lo slash finale se non presente
+        this.wsartRoutesPrefix = prefix.match(/\/$/) ? prefix : prefix + '/';
+        this.wsartLoginUrl = this.wsartRoutesPrefix + 'sessions';
+        $authProvider.loginUrl = this.wsartLoginUrl;
       };
       this.$get = function () {
         return this;

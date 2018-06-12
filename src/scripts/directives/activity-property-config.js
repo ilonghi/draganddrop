@@ -194,7 +194,7 @@
     $scope.save = function() {
       var loadingModal = sirtiLoadingModal.open();
       apiArtInstanceActivityTypeActivityPropertiesService.modify({ TYPE: $scope.activityType }, { ap: $scope.models.ap }).$promise
-        .then(function(result) {
+        .then(function() {
           loadingModal.close();
           sirtiAlert.success('Activity property successfully saved');
         })

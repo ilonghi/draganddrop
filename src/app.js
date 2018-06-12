@@ -5,32 +5,33 @@ angular
 .module('sApp', ['api-art'])
 
 //.config(function(apiArtConfigProvider) {
-//  apiArtConfigProvider.setWsartRoutesPrefix('http://apu.simpsons.fake/api/art/');
+//  apiArtConfigProvider.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
 //})
 
 .run(function(apiArtConfig) {
   apiArtConfig.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
 })
 
-.run(function($auth, apiArtIsAuthenticated) {
-//  $auth.setToken('eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOiJXeDAtNkZTcUROc2JzQzhfanZCRzJEN3pzWm9GRkZUQSJ9.vfz7lE0ZkdjkmJ9R_hsz1mrwbE_G8Mdff-bpv7Dt6Sc');
-  $auth.removeToken();
-  $auth.setToken('pippo');
-  console.log("is authenticated: ", apiArtIsAuthenticated());
-  $auth.login({
-    "username": "root",
-    "password": "pippo123"
-  })
-    .then(function(response) {
-      console.log($auth.getToken());
-      console.log("is authenticated: ", apiArtIsAuthenticated());
-      // Redirect user here after a successful log in.
-    })
-    .catch(function(response) {
-      // Handle errors here, such as displaying a notification
-      // for invalid email and/or password.
-    });
-})
+//.run(function($auth, apiArtIsAuthenticated) {
+////  $auth.setToken('eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOiJXeDAtNkZTcUROc2JzQzhfanZCRzJEN3pzWm9GRkZUQSJ9.vfz7lE0ZkdjkmJ9R_hsz1mrwbE_G8Mdff-bpv7Dt6Sc');
+//  console.log("is authenticated: ", apiArtIsAuthenticated());
+//  $auth.removeToken();
+//  console.log("is authenticated: ", apiArtIsAuthenticated());
+////  $auth.setToken('pippo');
+////  $auth.login({
+////    "username": "root",
+////    "password": "pippo123"
+////  })
+////    .then(function(response) {
+////      console.log($auth.getToken());
+////      console.log("is authenticated: ", apiArtIsAuthenticated());
+////      // Redirect user here after a successful log in.
+////    })
+////    .catch(function(response) {
+////      // Handle errors here, such as displaying a notification
+////      // for invalid email and/or password.
+////    });
+//})
 
 .controller('sCtrl', function(apiArtLoginModal) {
   apiArtLoginModal.open();

@@ -209,7 +209,14 @@
         })
         .catch(function(err) {
           loadingModal.close();
-          sirtiAlert.error(err);
+          if(err.status === 401) {
+            apiArtLoginModal.open()
+              .then(function() {
+                sirtiAlert.warning('Activity property was not saved');
+              });
+          } else {
+            sirtiAlert.error(err);
+          }
         });
       // $timeout(function() {
       //   loadingModal.close();

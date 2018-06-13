@@ -14,7 +14,13 @@ angular
   // apiArtConfig.setWsartRoutesPrefix('http://dvmas003.ict.sirti.net:10128/wphdtfows/api/art/');
 })
 
-.controller('sCtrl', function() {
+.controller('sCtrl', function($scope, apiArtLogout, $location, $window) {
+  $scope.logout = function() {
+    apiArtLogout(function() {
+      $location.url('/');
+      $window.location.reload();
+    });
+  };
 })
 
 ;

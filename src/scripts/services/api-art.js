@@ -35,12 +35,14 @@
           login: {
             method: 'POST',
             params: {},
-            withCredentials: true
+            withCredentials: false,
+            skipAuthorization: false
           },
           logout: {
             method: 'DELETE',
             params: {},
-            withCredentials: true
+            withCredentials: apiArtConfig.withCredentials,
+            skipAuthorization: apiArtConfig.skipAuthorization
           }
         },
         {
@@ -56,7 +58,8 @@
           get : {
             method : 'GET',
             params : {},
-            withCredentials : true
+            withCredentials: apiArtConfig.withCredentials,
+            skipAuthorization: apiArtConfig.skipAuthorization
           }
         },
         {
@@ -73,12 +76,14 @@
             method : 'GET',
             params : {},
             isArray: true,
-            withCredentials : true
+            withCredentials: apiArtConfig.withCredentials,
+            skipAuthorization: apiArtConfig.skipAuthorization
           },
           modify : {
             method : 'PUT',
             params : {},
-            withCredentials : true
+            withCredentials: apiArtConfig.withCredentials,
+            skipAuthorization: apiArtConfig.skipAuthorization
           }
         },
         {
@@ -95,7 +100,8 @@
             method : 'GET',
             params : {},
             isArray: true,
-            withCredentials : true
+            withCredentials: apiArtConfig.withCredentials,
+            skipAuthorization: apiArtConfig.skipAuthorization
           }
         },
         {

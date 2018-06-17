@@ -4,21 +4,21 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		ngtemplates : {
-			'api-art': {
+			'restart': {
 				cwd: './src',
 				src : 'views/**/*.html', // where my view files are
 				dest : '.tmp/tpl.js', // single file of $templateCache
-				standalone: false	// expects module 'api-art' is available (default=false)
+				standalone: false	// expects module 'restart' is available (default=false)
 			}
 		},
 		concat : {
 			dist : {
-				src : [ 'src/api-art.js', 'src/scripts/**/*.js', '.tmp/tpl.js' ],
-				dest : 'dist/api-art.js'
+				src : [ 'src/restart.js', 'src/scripts/**/*.js', '.tmp/tpl.js' ],
+				dest : 'dist/restart.js'
 			},
 			distcss : {
 				src : [ 'src/css/*.css' ],
-				dest : 'dist/api-art.css'
+				dest : 'dist/restart.css'
 			}
 		},
 		watch: {
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-newer');
 
-	grunt.registerTask('build', [ 'newer:jshint', 'newer:jscs', 'ngtemplates:api-art', 'concat:dist', 'concat:distcss' ]);
+	grunt.registerTask('build', [ 'newer:jshint', 'newer:jscs', 'ngtemplates:restart', 'concat:dist', 'concat:distcss' ]);
 
 	grunt.registerTask('serve', [ 'connect:livereload', 'watch' ]);
 

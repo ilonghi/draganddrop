@@ -1,10 +1,10 @@
-# api-art
+# restart
 
 ...
 
-Il codice è mantenuto nel repo Bitbucket [Working+ / Common / JS::NG::ApiArt](https://bitbucket.org/SirtiWPL/js-ng-apiart.git)
+Il codice è mantenuto nel repo Bitbucket [Working+ / Common / JS::NG::Restart](https://bitbucket.org/SirtiWPL/js-ng-restart.git)
 ma la distribuzione per l'aggiunta a progetti `Angular 1.x` avviene attraverso
-un [repo 'locale'](http://dvmas003.ict.sirti.net:10090/git/js-ng-apiart.git) per
+un [repo 'locale'](http://dvmas003.ict.sirti.net:10090/git/js-ng-restart.git) per
 consentire lo scaricamento da Git senza la necessità di specificare credenziali d'accesso.
 
 ## Install
@@ -12,20 +12,20 @@ consentire lo scaricamento da Git senza la necessità di specificare credenziali
 E' possibile aggiungere la direttiva ad un progetto `Angular 1.x` mediante `bower`:
 
 ```shell
-bower install --save api-art=http://dvmas003.ict.sirti.net:10090/git/js-ng-apiart.git
+bower install --save restart=http://dvmas003.ict.sirti.net:10090/git/js-ng-restart.git
 ```
 
-I file da includere nel progetto si troveranno al seguente path `bower_components/api-art/dist`:
+I file da includere nel progetto si troveranno al seguente path `bower_components/restart/dist`:
 
 ```html
-<link rel="stylesheet" href="bower_components/api-art/dist/api-art.css">
-<script src="bower_components/api-art/dist/api-art.js"></script>
+<link rel="stylesheet" href="bower_components/restart/dist/restart.css">
+<script src="bower_components/restart/dist/restart.js"></script>
 ```
 
 Aggiunta componente all'app di `Angular`:
 
 ```javascript
-angular.module('myApp', ['api-art'])
+angular.module('myApp', ['restart'])
 ```
 
 E' inoltre necessario caricare le seguenti dipendenze:
@@ -58,7 +58,7 @@ Puoi trovare esempi di utilizzo nei file `index.html` e `app.js` nella cartella 
 
 ### Direttive
 
-#### api-art-activity-property-config
+#### restart-activity-property-config
 
 ## Changelog
 

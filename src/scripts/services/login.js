@@ -2,7 +2,7 @@
 
   'use strict';
 
-  function apiArtLoginModalCtrl($scope, $auth, sirtiAlert) {
+  function restartLoginModalCtrl($scope, $auth, sirtiAlert) {
     $scope.login = function() {
       $auth.login({
         username: $scope.username,
@@ -24,9 +24,9 @@
   
   angular
 
-    .module('api-art')
+    .module('restart')
 
-    .service('apiArtLoginModal', function($uibModal) {
+    .service('restartLoginModal', function($uibModal) {
       this.open = function() {
         // restituisce una promise che si risolve al login dell'utente
         // ma non viene mai rejected in quanto la finestra di login non può
@@ -37,7 +37,7 @@
           keyboard: false,
           backdrop: 'static',
           size: 'sm',
-          controller: apiArtLoginModalCtrl
+          controller: restartLoginModalCtrl
         }).result;
       };
     })

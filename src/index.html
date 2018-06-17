@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Api Art</title>
+<title>Restart</title>
 
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="css/activity-property-config.css">
 
 <!-- 
-<link rel="stylesheet" href="dist/api-art.css">
+<link rel="stylesheet" href="dist/restart.css">
  -->
 
 </head>
@@ -19,7 +19,7 @@
 
 <div ng-app="sApp" ng-controller="sCtrl" class="container-fluid">
 
-  <div class="navbar navbar-default">
+  <div class="navbar navbar-default" ng-show="isAuthenticated()">
     <div class="container-fluid">
       <div class="navbar-right">
         <button class="btn btn-default navbar-btn" ng-click="logout()">logout</button>
@@ -29,9 +29,9 @@
 
   <div class="row">
     <div class="col-md-12">
-      <api-art-activity-property-config
+      <restart-activity-property-config
         activity-type="TT"
-      ></api-art-activity-property-config>
+      ></restart-activity-property-config>
     </div>
   </div> 
 
@@ -52,13 +52,13 @@
 <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
 <script src="bower_components/sirti-utils/dist/sirti-utils.js"></script>
 
-<script src="api-art.js"></script>
-<script src="scripts/services/api-art.js"></script>
+<script src="restart.js"></script>
+<script src="scripts/services/restart.js"></script>
 <script src="scripts/services/login.js"></script>
 <script src="scripts/directives/activity-property-config.js"></script>
 
 <!-- 
-<script src="dist/api-art.js"></script>
+<script src="dist/restart.js"></script>
  -->
 
 <script src="app.js"></script>

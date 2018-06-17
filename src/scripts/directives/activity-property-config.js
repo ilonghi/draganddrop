@@ -19,10 +19,10 @@
       $q,
       $timeout,
       $window,
-      apiArtInstanceActivityTypePropertiesService,
-      apiArtInstanceActivityTypeActivityPropertiesService,
-      apiArtInstanceActivityPropertiesGroupsService,
-      apiArtLoginModal,
+      restartInstanceActivityTypePropertiesService,
+      restartInstanceActivityTypeActivityPropertiesService,
+      restartInstanceActivityPropertiesGroupsService,
+      restartLoginModal,
       sirtiLoadingModal,
       sirtiAlert
     ) {
@@ -44,9 +44,9 @@
     $scope.origGroupName = undefined;
 
     var promises = [
-      apiArtInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
-      apiArtInstanceActivityTypeActivityPropertiesService.get({ TYPE: $scope.activityType }).$promise,
-      apiArtInstanceActivityPropertiesGroupsService.get().$promise
+      restartInstanceActivityTypePropertiesService.get({ TYPE: $scope.activityType }).$promise,
+      restartInstanceActivityTypeActivityPropertiesService.get({ TYPE: $scope.activityType }).$promise,
+      restartInstanceActivityPropertiesGroupsService.get().$promise
     ];
 
     $q.all(promises)
@@ -94,7 +94,7 @@
       .catch(function(err) {
         loadingModal.close();
         if(err.status === 401) {
-          apiArtLoginModal.open()
+          restartLoginModal.open()
             .then(function() {
               $window.location.reload();
             });
@@ -202,7 +202,7 @@
 
     $scope.save = function() {
       var loadingModal = sirtiLoadingModal.open();
-      apiArtInstanceActivityTypeActivityPropertiesService.modify({ TYPE: $scope.activityType }, { ap: $scope.models.ap }).$promise
+      restartInstanceActivityTypeActivityPropertiesService.modify({ TYPE: $scope.activityType }, { ap: $scope.models.ap }).$promise
         .then(function() {
           loadingModal.close();
           sirtiAlert.success('Activity property successfully saved');
@@ -210,7 +210,7 @@
         .catch(function(err) {
           loadingModal.close();
           if(err.status === 401) {
-            apiArtLoginModal.open()
+            restartLoginModal.open()
               .then(function() {
                 sirtiAlert.warning('Activity property was not saved');
               });
@@ -244,12 +244,12 @@
 
   angular
 
-    .module('api-art')
+    .module('restart')
 
     /*
-     * direttiva api-art-activity-property-config
+     * direttiva restart-activity-property-config
      */
-    .directive('apiArtActivityPropertyConfig', activityPropertyConfigDirective)
+    .directive('restartActivityPropertyConfig', activityPropertyConfigDirective)
 
   ;
 

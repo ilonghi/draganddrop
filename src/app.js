@@ -2,25 +2,29 @@
 
 angular
 
-.module('sApp', ['api-art'])
+.module('sApp', ['restart'])
 
-//.config(function(apiArtConfigProvider) {
-//  apiArtConfigProvider.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
-//  apiArtConfigProvider.setWsartRoutesPrefix('http://dvmas003.ict.sirti.net:10128/wphdtfows/api/art/');
-//  apiArtConfigProvider.setAuthType('JWT');
-//  apiArtConfigProvider.setAuthType('cookie');
+//.config(function(restartConfigProvider) {
+//  restartConfigProvider.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
+//  restartConfigProvider.setWsartRoutesPrefix('http://dvmas003.ict.sirti.net:10128/wphdtfows/api/art/');
+//  restartConfigProvider.setAuthType('JWT');
+//  restartConfigProvider.setAuthType('cookie');
 //})
 
-.run(function(apiArtConfig) {
-  apiArtConfig.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
-  // apiArtConfig.setWsartRoutesPrefix('http://dvmas003.ict.sirti.net:10128/wphdtfows/api/art/');
-  // apiArtConfig.setAuthType('JWT');
-  apiArtConfig.setAuthType('cookie');
+.run(function(restartConfig) {
+  restartConfig.setWsartRoutesPrefix('http://apu.simpsons.fake/wphdtfows/api/art/');
+  // restartConfig.setWsartRoutesPrefix('http://dvmas003.ict.sirti.net:10128/wphdtfows/api/art/');
+  // restartConfig.setAuthType('JWT');
+  restartConfig.setAuthType('cookie');
 })
 
-.controller('sCtrl', function($scope, apiArtLogout, $location, $window) {
+.controller('sCtrl', function($scope, restartLogout, $location, $window, restartIsAuthenticated) {
+  $scope.isAuthenticated = function() {
+    return restartIsAuthenticated();
+  };
+  
   $scope.logout = function() {
-    apiArtLogout(function() {
+    restartLogout(function() {
       $location.url('/');
       $window.location.reload();
     });

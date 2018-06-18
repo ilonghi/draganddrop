@@ -22,6 +22,7 @@
   <div class="navbar navbar-default" ng-show="isAuthenticated()">
     <div class="container-fluid">
       <div class="navbar-right">
+      	<span>{{user.firstName}} {{user.lastName}}</span>
         <button class="btn btn-default navbar-btn" ng-click="logout()">logout</button>
       </div>
     </div>
@@ -50,6 +51,7 @@
 <script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
 <script src="bower_components/underscore/underscore-min.js"></script>
 <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
+<script src="bower_components/ngstorage/ngStorage.min.js"></script>
 <script src="bower_components/sirti-utils/dist/sirti-utils.js"></script>
 
 <script src="restart.js"></script>

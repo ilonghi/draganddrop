@@ -11,6 +11,7 @@
       'ngSanitize',
       'ui.bootstrap',
       'satellizer',
+      'ngStorage',
       'sirti-utils'
     ])
 

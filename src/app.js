@@ -18,7 +18,10 @@ angular
   restartConfig.setAuthType('cookie');
 })
 
-.controller('sCtrl', function($scope, restartLogout, $location, $window, restartIsAuthenticated) {
+.controller('sCtrl', function($scope, restartLogout, $location, $window, restartUserProfile, restartIsAuthenticated) {
+  
+  $scope.user = restartUserProfile.get();
+  
   $scope.isAuthenticated = function() {
     return restartIsAuthenticated();
   };

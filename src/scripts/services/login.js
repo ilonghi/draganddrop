@@ -2,17 +2,18 @@
 
   'use strict';
 
-  function restartLoginModalCtrl($scope, $auth, sirtiAlert) {
+  function restartLoginModalCtrl($scope, $auth, restartUserProfile, sirtiAlert) {
     $scope.login = function() {
       $auth.login({
         username: $scope.username,
         password: $scope.password
       })
-        .then(function() {
+        .then(function(response) {
           // TODO: la funzione viene invocata con la response della chiamata rest
           // da raccogliere per settare il profilo dell'utente
           // console.log(response);
           // console.log($auth.getToken());
+          restartUserProfile.set(response.data.user);
           $scope.$close();
         })
         .catch(function(err) {

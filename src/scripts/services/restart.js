@@ -12,11 +12,26 @@
       };
     })
 
-    .factory('restartLogout', function($auth, $location, $window, restartSessionService, sirtiAlert, sirtiLoadingModal) {
+    .factory('restartUserProfile', function($sessionStorage) {
+      return {
+        get: function() {
+          return $sessionStorage.user;
+        },
+        set: function(user) {
+          $sessionStorage.user = user;
+        },
+        remove: function() {
+          delete $sessionStorage.user;
+        }
+      };
+    })
+
+    .factory('restartLogout', function($auth, $location, $window, restartUserProfile, restartSessionService, sirtiAlert, sirtiLoadingModal) {
       return function(successCallback) {
         var loadingModal = sirtiLoadingModal.open();
         restartSessionService.logout({ TOKEN: $auth.getToken() }).$promise
           .then(function() {
+            restartUserProfile.remove();
             $auth.logout();
             loadingModal.close();
             successCallback();

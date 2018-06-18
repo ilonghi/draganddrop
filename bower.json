@@ -22,7 +22,8 @@
     "angular-drag-and-drop-lists": "^2.1.0",
     "underscore": "^1.8.3",
     "sirti-utils": "http://dvmas003.ict.sirti.net:10090/git/js-ng-sirtiutils.git",
-    "satellizer": "^0.15.5"
+    "satellizer": "^0.15.5",
+    "ngstorage": "^0.3.11"
   },
   "keywords": [],
   "license": "MIT",

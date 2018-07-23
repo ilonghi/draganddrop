@@ -18,7 +18,7 @@ angular
   restartConfig.setAuthType('cookie');
 })
 
-.controller('sCtrl', function($scope, restartLogout, $location, $window, restartUserProfile, restartIsAuthenticated) {
+.controller('sCtrl', function($scope, restartLogout, restartLoginModal, $location, $window, restartUserProfile, restartIsAuthenticated) {
   
   $scope.user = restartUserProfile.get();
   
@@ -32,6 +32,14 @@ angular
       $window.location.reload();
     });
   };
+  
+  $scope.unauthorizedCallback = function() {
+    restartLoginModal.open()
+      .then(function() {
+        $window.location.reload();
+      });
+  };
+  
 })
 
 ;

@@ -93,11 +93,8 @@
       })
       .catch(function(err) {
         loadingModal.close();
-        if(err.status === 401) {
-          restartLoginModal.open()
-            .then(function() {
-              $window.location.reload();
-            });
+        if(err.status === 401 && angular.isFunction($scope.unauthorizedCallback)) {
+          $scope.unauthorizedCallback();
         } else {
           sirtiAlert.fatal(err, { referenceId: 'load-ko' });
         }
@@ -209,19 +206,12 @@
         })
         .catch(function(err) {
           loadingModal.close();
-          if(err.status === 401) {
-            restartLoginModal.open()
-              .then(function() {
-                sirtiAlert.warning('Activity property was not saved');
-              });
+          if(err.status === 401 && angular.isFunction($scope.unauthorizedCallback)) {
+            $scope.unauthorizedCallback();
           } else {
             sirtiAlert.error(err);
           }
         });
-      // $timeout(function() {
-      //   loadingModal.close();
-      //   sirtiAlert.error('Not yet implemented!');
-      // }, 2000);
     };
 
     // Model to JSON for demo purpose
@@ -236,6 +226,7 @@
       restrict: 'E',
       scope: {
         activityType: '@',
+        unauthorizedCallback: '=' 
       },
       templateUrl: 'views/directives/activity-property-config.html',
       controller: activityPropertyConfigCtrl

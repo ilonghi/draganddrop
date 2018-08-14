@@ -3,10 +3,17 @@
 <head>
 <title>Restart</title>
 
+<!--
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css">
 <link rel="stylesheet" href="bower_components/sirti-utils/dist/sirti-utils.css">
+-->
+
+<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="node_modules/angular-growl-v2/build/angular-growl.min.css">
+<link rel="stylesheet" href="node_modules/sirti-utils/dist/sirti-utils.css">
 
 <link rel="stylesheet" href="css/activity-property-config.css">
 
@@ -21,7 +28,7 @@
 
   <div class="navbar navbar-default" ng-show="isAuthenticated()">
     <div class="container-fluid">
-      <div class="navbar-right">
+      <div class="navbar-left">
       	<span>{{user.firstName}} {{user.lastName}}</span>
         <button class="btn btn-default navbar-btn" ng-click="logout()">logout</button>
       </div>
@@ -41,6 +48,7 @@
 
 </div>
 
+<!--
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -54,6 +62,21 @@
 <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
 <script src="bower_components/ngstorage/ngStorage.min.js"></script>
 <script src="bower_components/sirti-utils/dist/sirti-utils.js"></script>
+-->
+
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="node_modules/angular-resource/angular-resource.min.js"></script>
+<script src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+<script src="node_modules/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script src="node_modules/angular-growl-v2/build/angular-growl.min.js"></script>
+<script src="node_modules/underscore/underscore-min.js"></script>
+<script src="node_modules/satellizer/satellizer.js"></script>
+<script src="node_modules/ngstorage/ngStorage.min.js"></script>
+<script src="node_modules/sirti-utils/dist/sirti-utils.js"></script>
 
 <script src="restart.js"></script>
 <script src="scripts/services/restart.js"></script>

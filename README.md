@@ -9,17 +9,26 @@ consentire lo scaricamento da Git senza la necessità di specificare credenziali
 
 ## Install
 
-E' possibile aggiungere la direttiva ad un progetto `Angular 1.x` mediante `bower`:
+E' possibile aggiungere la direttiva ad un progetto `Angular 1.x` mediante `bower` o `npm`:
 
 ```shell
 bower install --save restart=http://dvmas003.ict.sirti.net:10090/git/js-ng-restart.git
 ```
 
-I file da includere nel progetto si troveranno al seguente path `bower_components/restart/dist`:
+```shell
+npm install --save http://dvmas003.ict.sirti.net:10090/git/js-ng-restart.git
+```
+
+Includere i file nel progetto:
 
 ```html
+<!-- bower -->
 <link rel="stylesheet" href="bower_components/restart/dist/restart.css">
 <script src="bower_components/restart/dist/restart.js"></script>
+
+<!-- npm -->
+<link rel="stylesheet" href="node_modules/restart/dist/restart.css">
+<script src="node_modules/restart/dist/restart.js"></script>
 ```
 
 Aggiunta componente all'app di `Angular`:
@@ -31,13 +40,11 @@ angular.module('myApp', ['restart'])
 E' inoltre necessario caricare le seguenti dipendenze:
 
 ```html
-<!-- stylesheets -->
+<!-- bower -->
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css">
 <link rel="stylesheet" href="bower_components/sirti-utils/dist/sirti-utils.css">
-
-<!-- scripts -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -50,6 +57,25 @@ E' inoltre necessario caricare le seguenti dipendenze:
 <script src="bower_components/underscore/underscore-min.js"></script>
 <script src="bower_components/satellizer/dist/satellizer.min.js"></script>
 <script src="bower_components/sirti-utils/dist/sirti-utils.js"></script>
+
+<!-- npm -->
+<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="node_modules/angular-growl-v2/build/angular-growl.min.css">
+<link rel="stylesheet" href="node_modules/sirti-utils/dist/sirti-utils.css">
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="node_modules/angular-resource/angular-resource.min.js"></script>
+<script src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+<script src="node_modules/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script src="node_modules/angular-growl-v2/build/angular-growl.min.js"></script>
+<script src="node_modules/underscore/underscore-min.js"></script>
+<script src="node_modules/satellizer/satellizer.js"></script>
+<script src="node_modules/ngstorage/ngStorage.min.js"></script>
+<script src="node_modules/sirti-utils/dist/sirti-utils.js"></script>
 ```
 
 ## Documentation
@@ -62,7 +88,7 @@ Puoi trovare esempi di utilizzo nei file `index.html` e `app.js` nella cartella 
 
 ## Changelog
 
-* **0.0.1**
+* **0.1.0**
     * prima versione stabile
 
 ## License

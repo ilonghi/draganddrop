@@ -1,7 +1,35 @@
 {
   "name": "restart",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
+  "authors": [
+    "Ivan Longhi <i.longhi@ext.sirti.it>",
+    "Alvaro Livraghi <a.livraghi@sirti.it>",
+    "Rizzardo Belotti <r.belotti@ext.sirti.it>",
+    "Massimo Vasile <m.vasile@sirti.it>"
+  ],
+  "description": "TBD",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/SirtiWPL/js-ng-restart.git"
+  },
+  "dependencies": {
+    "angular-animate": "^1.4.7",
+    "angular-drag-and-drop-lists": "^2.1.0",
+    "angular-resource": "^1.4.7",
+    "angular-sanitize": "^1.4.7",
+    "angular-ui-bootstrap": "^1.3.3",
+    "angular": "^1.4.7",
+    "bootstrap": "^3.3.7",
+    "jquery": "^2.1.4",
+    "ngstorage": "^0.3.11",
+    "satellizer": "0.14.1",
+    "sirti-utils": "git+http://dvmas003.ict.sirti.net:10090/git/js-ng-sirtiutils.git#v0.2.0",
+    "underscore": "^1.7.0"
+  },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
     "grunt": "^0.4.5",
@@ -15,7 +43,7 @@
     "jshint-stylish": "^2.2.1"
   },
   "engines": {
-    "node": ">=0.10.0"
-  },
-  "dependencies": {}
+    "node": ">=8.9.3",
+    "npm": ">=5.5.1"
+  }
 }
